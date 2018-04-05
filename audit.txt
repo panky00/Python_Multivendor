@@ -1,0 +1,106 @@
+RP/0/RSP0/CPU0:SC2-A1#sh int desc | util egrep  'Interface|SC2CFDZEUSR1-03'
+Wed Apr  4 14:45:32.354 MET
+Interface          Status      Protocol    Description
+Te0/0/0/8          up          up          FED_SC2CFDZEUSR1-03_Eth1/1
+Te0/0/0/8.1500     up          up          LAN_NOOBA_SC2CFDZEUSR1-03_1500_10G
+Te0/0/0/8.2490     up          up          <> FED_VRF-RVP_ETRALI_SC2CFDZEUSR1-03_S1P1_2490_10G
+Te0/0/0/8.2501     up          up          FED_PRVSHAREDSERVICES_SC2CFDZEUSR1-03_3801_10G
+Te0/0/0/8.3901     up          up          SC2-A1-Te4/6.3901_ SC2CFDZEUSR1-03-ETH1/1
+Gi0/6/0/3.2478     up          up          RVP_IBFS_DEV  - Firewall Production Interface
+
+RP/0/RSP0/CPU0:SC2-A1#sh ipv4 interface brief | utility egrep 'Interface|0/0/0/8'
+Wed Apr  4 14:46:04.372 MET
+Interface                      IP-Address      Status          Protocol Vrf-Name
+TenGigE0/0/0/8                 unassigned      Up              Up       default
+TenGigE0/0/0/8.1500            192.0.1.124     Up              Up       RVP_NOOBA
+TenGigE0/0/0/8.2490            192.2.156.93    Up              Up       RVP_ETRALI
+TenGigE0/0/0/8.2501            192.4.148.50    Up              Up       RVP_PRIVSHAREDSERVICES
+TenGigE0/0/0/8.3801            192.2.248.50    Up              Up       RVP_SHAREDSERVICES
+TenGigE0/0/0/8.3901            192.2.8.218     Up              Up       RVP_RUS
+
+router bgp 64911
+ vrf RVP_ETRALI
+  neighbor 192.2.156.94
+   remote-as 64923
+   bfd fast-detect
+   bfd multiplier 3
+   bfd minimum-interval 500
+   password encrypted 132C39262E3E270514161E030A072735372F28
+   description eBGP RVP_ETRALI SC2CFDZEUSR1-03
+   address-family ipv4 unicast
+    route-policy eBGP:RED-PLAN-FROM-AS64919:IN in
+    route-policy eBGP:RED-PLAN-TO-AS64919:OUT out
+    as-override
+    soft-reconfiguration inbound
+    site-of-origin 192.2.155.167:64923
+   !
+  !
+ !
+!
+router bgp 64911
+ vrf RVP_PRIVSHAREDSERVICES
+  neighbor 192.4.148.49
+   remote-as 64923
+   bfd fast-detect
+   bfd multiplier 3
+   bfd minimum-interval 500
+   timers 60 180
+   password encrypted 1067070D0005110433361C1B1B180103113B26242625657C6A65
+   description eBGP PRV SHARED SERVICES SC2ZEUSR1-01
+   address-family ipv4 unicast
+    send-community-ebgp
+    route-policy PASS_ALL in
+    route-policy PASS_ALL out
+    as-override
+    send-extended-community-ebgp
+    soft-reconfiguration inbound
+    site-of-origin 192.4.145.167:64923
+   !
+  !
+ !
+!
+router bgp 64911
+ vrf RVP_SHAREDSERVICES
+  neighbor 192.2.248.49
+   remote-as 64923
+   bfd fast-detect
+   bfd multiplier 3
+   bfd minimum-interval 500
+   timers 60 180
+   password encrypted 153B05180138282B170103122C343E2233737D6B7666382A3B33
+   description eBGP SHARED SERVICES SC2ZEUSR1-01
+   address-family ipv4 unicast
+    send-community-ebgp
+    route-policy PASS_ALL in
+    route-policy PASS_ALL out
+    as-override
+    send-extended-community-ebgp
+    soft-reconfiguration inbound
+    site-of-origin 192.2.245.167:64923
+   !
+  !
+ !
+!
+router bgp 64911
+ vrf RVP_RUS
+  neighbor 192.2.8.217
+   remote-as 64923
+   bfd fast-detect
+   bfd multiplier 3
+   bfd minimum-interval 500
+   local-as 64997 no-prepend replace-as
+   password encrypted 0808425A0C0B06182D392F370D14161E030A102634
+   description Peer eBGP RVP_RUS SC2CFDZEUSR2-04
+   address-family ipv4 unicast
+    send-community-ebgp
+    route-policy PASS_ALL in
+    route-policy PASS_ALL out
+    as-override
+    send-extended-community-ebgp
+    soft-reconfiguration inbound
+    site-of-origin 192.2.7.167:64923
+   !
+  !
+ !
+!
+

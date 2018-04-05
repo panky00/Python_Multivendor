@@ -1,0 +1,1056 @@
+!--------------------------------------------------------	 
+!PRE-Check {{item.hostname}}: Step 0 Capture the O/P of the below commands for comparison after the change
+!--------------------------------------------------------	
+!
+show ip int brief | in {{item.main_interface}}
+!
+show interfaces {{item.main_interface}} | in errors
+!
+!
+sh bgp vrf all summary | utility egrep '192.129.240.218|192.129.241.138|192.129.241.162|192.129.241.18\b|192.129.241.42|192.129.241.66|192.129.241.86|192.2.141.126|192.2.14.54|192.2.16.54|192.2.173.218|192.2.181.174|192.2.203.146|192.2.21.214|192.2.213.34|192.2.26.30|192.2.36.134'
+!
+!
+!
+{% for nei in sub_int %}
+sh bgp vrf {{ sub_int.vrf }} neighbors {{ sub_int.nei }} routes 
+!
+sh bgp vrf {{ sub_int.vrf }} neighbors {{ sub_int.nei }} routes | in Processed
+!
+sh bgp vrf {{ sub_int.vrf }} neighbors {{ sub_int.nei }} advertised-routes
+!
+sh bgp vrf {{ sub_int.vrf }} neighbors {{ sub_int.nei }} advertised-count
+{% endfor %}
+!
+!
+
+
+!#####################################################################################	 
+!Step 1A Rollout:{{item.hostname}} => change the description of  sub-interfaces for TIGR4-ODIN-CFD-vdc2
+!####################################################################################	 
+!
+interface TenGigE0/0/0/6
+ description FED_TIGR4-ODIN-CFD-vdc2_ETH_2/2_10G
+ !
+interface TenGigE0/0/0/6.3052
+ description FED_MGT_ TIGR4-ODIN-CFD-vdc2_3052_10G
+ !
+interface TenGigE0/0/0/6.3324
+ description FED_RVP_ITEC_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3324_10G
+ !
+interface TenGigE0/0/0/6.3331
+ description FED_BIP_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3331_10G
+ !
+interface TenGigE0/0/0/6.3332
+ description FED_COM_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3332_10G
+ !
+interface TenGigE0/0/0/6.3333
+ description FED_DCITS_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3333_10G
+ !
+interface TenGigE0/0/0/6.3334
+ description FED_HCITS_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3334_10G
+ !
+interface TenGigE0/0/0/6.3335
+ description FED_HCOM_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3335_10G
+ !
+interface TenGigE0/0/0/6.3338
+ description FED_PCITS_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3338_10G
+ !
+interface TenGigE0/0/0/6.3339
+ description FED_PCOM_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3339_10G
+ !
+interface TenGigE0/0/0/6.3340
+ description FED_PFBESIA_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3340_10G
+ !
+interface TenGigE0/0/0/6.3341
+ description FED_PFHSIA_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3341_10G
+ !
+interface TenGigE0/0/0/6.3342
+ description FED_PFPSIA_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3342_10G
+ !
+interface TenGigE0/0/0/6.3343
+ description FED_PFRSIA_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3343_10G
+ !
+interface TenGigE0/0/0/6.3344
+ description FED_RDS_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3344_10G
+ !
+interface TenGigE0/0/0/6.3345
+ description FED_RIX_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3345_10G
+ !
+interface TenGigE0/0/0/6.3346
+ description FED_RIX_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3346_10G
+ !
+interface TenGigE0/0/0/6.3347
+ description FED_RVP_CDN_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3347_10G
+ !
+interface TenGigE0/0/0/6.3348
+ description FED_GIMS_TIGR4-ODIN-CFD-vdc2_S2/2_3348_10G
+ !
+interface TenGigE0/0/0/6.3349
+ description RVP_GTB_Interco_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3349_10G
+ !
+interface TenGigE0/0/0/6.3350
+ description <>FED_RVP_SGSS_NAN-HDC_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3350_10G
+ !
+interface TenGigE0/0/0/6.3351
+ description <>FED_RVP_SGSS_NAN-PDC_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3351_10G
+ !
+interface TenGigE0/0/0/6.3352
+ description FED_RVP_SURETE_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3352_10G
+ !
+interface TenGigE0/0/0/6.3353
+ description FED_CAZA_TIGR4-ODIN-CFD-vdc2_ETH_2/2_3353_10G
+ !
+commit comment P8CH-0024221:Interface Description
+--------------------------------------------------------	 
+!{{item.hostname}} Shut down the BGP peerings and change the description for all the peers with VRF 
+!--------------------------------------------------------
+!
+router bgp 64911
+!
+
+vrf BIP
+ 
+ neighbors 192.129.241.66 
+ 
+shutdown 
+!
+
+vrf DCITS
+ 
+ neighbors 192.129.241.18 
+
+ shutdown 
+!
+
+vrf HCITS
+ 
+ neighbors 192.129.241.86
+ 
+ shutdown 
+!
+
+vrf HCOM
+ 
+ neighbors 192.129.241.42
+ 
+ shutdown 
+!
+
+vrf PCITS
+ 
+ neighbors 192.129.241.86
+ 
+ shutdown 
+!
+
+vrf PCOM
+ 
+ neighbors 192.129.240.218
+ 
+ shutdown 
+!
+
+vrf PFBESIA 
+
+  neighbors 192.2.26.30
+ 
+ shutdown 
+!
+
+vrf PFHSIA
+ 
+ neighbors 192.2.203.146
+ 
+ shutdown 
+!
+
+vrf PFPSIA
+ 
+ neighbors 192.129.241.138
+ 
+ shutdown 
+!
+
+vrf PFRSIA
+ 
+ neighbors 192.2.213.34
+ 
+ shutdown 
+!
+
+vrf RDS
+ 
+ neighbors 192.2.36.134
+ 
+ shutdown 
+!
+
+vrf RIX
+ 
+ neighbors 192.2.21.214
+ 
+ shutdown 
+!
+
+vrf RVP_CDN
+ 
+ neighbors 192.129.241.162
+ 
+ shutdown 
+!
+
+vrf RVP_GTB
+ 
+ neighbors 192.2.141.126
+ 
+ shutdown 
+!
+
+vrf RVP_SGSS_NAN-HDC
+ 
+ neighbors 192.2.16.54
+ 
+ shutdown 
+!
+
+vrf RVP_SGSS_NAN-PDC
+ 
+ neighbors 192.2.14.54
+ 
+ shutdown 
+!
+
+vrf RVP_SURETE
+ 
+ neighbors 192.2.173.218
+ 
+ shutdown 
+!
+
+vrf RVP_ITEC
+ 
+ neighbors 192.2.181.174
+ 
+ shutdown 
+!
+
+###Description detail is missing###   
+!--------------------------------------------------------	   
+!{{item.hostname}}: Disable MNGT's  OSPF if OSPF is running as PE-CE for mngt  
+!--------------------------------------------------------	
+
+!--------------------------------------------------------	   
+!{{item.hostname}}: Disable vrf PCITS  OSPF interface
+!--------------------------------------------------------	
+!
+router ospf 1
+!
+vrf PCITS
+area 0
+interface TenGigE0/0/0/6.3338
+passive enable
+!
+
+
+!--------------------------------------------------------
+{{item.hostname}}: Shutdown the PE<=>CE  interface
+!--------------------------------------------------------
+interface TenGigE0/0/0/6
+ shutdown
+!
+interface TenGigE0/0/0/6.3052
+ shutdown
+!
+interface TenGigE0/0/0/6.3324
+ shutdown
+!
+interface TenGigE0/0/0/6.3331
+ shutdown
+!
+interface TenGigE0/0/0/6.3332
+ shutdown
+!
+interface TenGigE0/0/0/6.3333
+ shutdown
+!
+interface TenGigE0/0/0/6.3334
+ shutdown
+!
+interface TenGigE0/0/0/6.3335
+ shutdown
+!
+interface TenGigE0/0/0/6.3338
+ shutdown
+!
+interface TenGigE0/0/0/6.3339
+ shutdown
+!
+interface TenGigE0/0/0/6.3340
+ shutdown
+!
+interface TenGigE0/0/0/6.3341
+ shutdown
+!
+interface TenGigE0/0/0/6.3342
+ shutdown
+!
+interface TenGigE0/0/0/6.3343
+ shutdown
+!
+interface TenGigE0/0/0/6.3344
+ shutdown
+!
+interface TenGigE0/0/0/6.3345
+ shutdown
+!
+interface TenGigE0/0/0/6.3346
+ shutdown
+!
+interface TenGigE0/0/0/6.3347
+ shutdown
+!
+interface TenGigE0/0/0/6.3348
+ shutdown
+!
+interface TenGigE0/0/0/6.3349
+ shutdown
+!
+interface TenGigE0/0/0/6.3350
+ shutdown
+!
+interface TenGigE0/0/0/6.3351
+ shutdown
+!
+interface TenGigE0/0/0/6.3352
+ shutdown
+!
+interface TenGigE0/0/0/6.3353
+ shutdown
+!
+!
+commit comment P8CH-0024221:Interface and BGP and OSPF Shutdown
+exit
+!********************************************************	   
+Checks-{{item.hostname}}	   
+!********************************************************	   
+!	
+sh ip int brief | in 0/0/0/6  
+! 
+sh bgp vrf all summary | utility egrep '192.129.240.218|192.129.241.138|192.129.241.162|192.129.241.18\b|192.129.241.42|192.129.241.66|192.129.241.86|192.2.141.126|192.2.14.54|192.2.16.54|192.2.173.218|192.2.181.174|192.2.203.146|192.2.21.214|192.2.213.34|192.2.26.30|192.2.36.134'
+! 
+sh ospf vrf PCITS neighbor
+!
+!
+!==> Quick Double-check that neighbors are down
+!
+!
+! ==> Note: BFD is not supported Vlan: All Vlan interface must be deleted and recreated as sub interfaces
+!
+! interface Ten or GigabitEthernet
+!
+! a) Check the description format: FED_<VRF NAME>_<CE NAME>_SxPx_BW_TELCO_NUMBER
+! B) If TElco Link add: dampening 
+! C) If not native speed: bandwidth x00000
+! C) logging event link-status
+! D) Check the correct WRR
+!
+!sub-interface Ten or GigabitEthernet.wxyz
+!
+! a) Check the description format: FED_<VRF NAME>_<CE NAME>_SxPx_BW
+! B) Add if missIN ing: no ip redirects,no ip unreachables, no ip proxy-arp
+! C) Add BFD: bfd  interval 500 min_rx 500 multiplier 3 /!\ for Etherchannels: bfd interval 750 min_rx 750 multiplier 3
+!
+!#####################################################################################
+! Step 3 Rollout Standardisation :{{item.hostname}}
+! ####################################################################################
+!	 
+!
+!--------------------------------------------------------
+! {{item.hostname}}: interface Standardisation:
+!--------------------------------------------------------
+!
+! ==> Note: BFD is not supported Vlan: All Vlan IN interface must be deleted and recreated as sub-IN interfaces
+!
+interface Ten or GigabitEthernet
+!
+! a) Check the description format: FED_<VRF NAME>_<CE NAME>_SxPx_BW_TELCO_NUMBER
+! B) If Telco link add: dampening 
+! C) If not native speedbandwidth x00000
+! C) logging event ink-status
+! D) Check the correct WRR
+!
+sub-interface Ten or GigabitEthernet.wxyz
+!
+! a) Check the description format: FED_<VRF NAME>_<CE NAME>_SxPx_BW
+! B) Add if missing: no ip redirects,no ip unreachables, no ip proxy-arp
+! C) Add if missing: bfd  interval 500 min_rx 500 multiplier 3 /!\ for Etherchannels: bfd  interval 750 mIN in_rx 750 multiplier 3
+! D) Add if missing: Add the service-policy output NET-PROTOCOLS
+!
+
+
+interface TenGigE0/0/0/6
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT
+ !
+interface TenGigE0/0/0/6.3052
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3324
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3331
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3332
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3333
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3334
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3335
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3338
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3339
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3340
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3341
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3342
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3343
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3344
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3345
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3346
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3347
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3348
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3349
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3350
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3351
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3352
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+interface TenGigE0/0/0/6.3353
+ service-policy input 10GE_PMAP_IN 
+ service-policy output 10GE_PMAP_OUT 
+ ipv4 unreachables disable
+ !
+!
+--------------------------------------------------------
+! {{item.hostname}}: eBGP with RED or BLUE Plan + BFD (Option 1 without static Metrics) and remove the existing route-maps if any
+!--------------------------------------------------------
+!
+!
+! 
+
+! 
+!
+!
+route-policy eBGP:BLUE-PLAN-FROM-AS64619:IN 
+ pass
+# Empty to be used for manual switchover
+end-policy
+!
+!
+extcommunity-set rt comm_69_p1_permit
+  64919:6666
+end-set
+!
+route-policy eBGP:BLUE-PLAN-TO-AS64619:OUT
+  if (extcommunity rt matches-any comm_69_p1_permit) then
+    prepend as-path 64911 5
+  else
+   pass
+  endif
+end-policy
+!
+route-policy eBGP:BLUE-PLAN-RIX-CE-ODIN:DENY-DEFAULT-ROUTE:IN
+  if (destination in DEFAULT_ROUTE) then
+    drop
+  else
+    pass
+  endif
+end-policy
+!
+route-policy eBGP:BLUE-PLAN-RVP-CDN-SET-MED:OUT
+  if (extcommunity rt matches-any comm_69_p1_permit) then
+    prepend as-path 64911 5
+  else
+   set med 100
+  endif
+end-policy
+!
+router bgp 64911
+!
+
+vrf BIP
+ neighbors 192.129.241.66 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out
+!
+vrf DCITS
+ 
+ neighbors 192.129.241.18 
+
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out
+ !
+
+vrf HCITS
+ 
+ neighbors 192.129.241.86
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out!
+
+vrf HCOM
+ 
+ neighbors 192.129.241.42
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out 
+!
+
+vrf PCITS
+ 
+ neighbors 192.129.241.86
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out 
+!
+
+vrf PCOM
+ 
+ neighbors 192.129.240.218
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out 
+!
+
+vrf PFBESIA 
+
+  neighbors 192.2.26.30
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out 
+!
+
+vrf PFHSIA
+ 
+ neighbors 192.2.203.146
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out 
+!
+
+vrf PFPSIA
+ 
+ neighbors 192.129.241.138
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out 
+!
+
+vrf PFRSIA
+ 
+ neighbors 192.2.213.34
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out 
+!
+
+vrf RDS
+ 
+ neighbors 192.2.36.134
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out 
+!
+
+vrf RIX
+ 
+ neighbors 192.2.21.214
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-RIX-CE-ODIN:DENY-DEFAULT-ROUTE:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out 
+!
+
+vrf RVP_CDN
+ 
+ neighbors 192.129.241.162
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out 
+!
+
+vrf RVP_GTB
+ 
+ neighbors 192.2.141.126
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:BLUE-PLAN-RVP-CDN-SET-MED:OUT out 
+!
+
+vrf RVP_SGSS_NAN-HDC
+ 
+ neighbors 192.2.16.54
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out 
+!
+
+vrf RVP_SGSS_NAN-PDC
+ 
+ neighbors 192.2.14.54
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out 
+!
+
+vrf RVP_SURETE
+ 
+ neighbors 192.2.173.218
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out 
+!
+
+vrf RVP_ITEC
+ 
+ neighbors 192.2.181.174
+ 
+ address-family ipv4 unicast
+ route-policy eBGP:BLUE-PLAN-from-AS64619:IN in
+ route-policy eBGP:RED-PLAN-to-AS64619:OUT out 
+!
+ exit
+!
+commit comment JUMP Ticket: Interface and BGP configuration Standarisation RCSGNG Phase2 for CE TIGD4 <--> TIGR4-ODIN-CFD-vdc2
+
+!#####################################################################################
+! Step 4 Rollout PE-CE IN interconnection reactivation
+! ####################################################################################
+!
+!--------------------------------------------------------	 
+! {{item.hostname}}: Enable the PE<=>CE interface
+!--------------------------------------------------------
+!	 
+interface TenGigE0/0/0/6
+ no shutdown
+!
+interface TenGigE0/0/0/6.3052
+ no shutdown
+!
+interface TenGigE0/0/0/6.3324
+ no shutdown
+!
+interface TenGigE0/0/0/6.3331
+ no shutdown
+!
+interface TenGigE0/0/0/6.3332
+ no shutdown
+!
+interface TenGigE0/0/0/6.3333
+ no shutdown
+!
+interface TenGigE0/0/0/6.3334
+ no shutdown
+!
+interface TenGigE0/0/0/6.3335
+ no shutdown
+!
+interface TenGigE0/0/0/6.3338
+ no shutdown
+!
+interface TenGigE0/0/0/6.3339
+ no shutdown
+!
+interface TenGigE0/0/0/6.3340
+ no shutdown
+!
+interface TenGigE0/0/0/6.3341
+ no shutdown
+!
+interface TenGigE0/0/0/6.3342
+ no shutdown
+!
+interface TenGigE0/0/0/6.3343
+ no shutdown
+!
+interface TenGigE0/0/0/6.3344
+ no shutdown
+!
+interface TenGigE0/0/0/6.3345
+ no shutdown
+!
+interface TenGigE0/0/0/6.3346
+ no shutdown
+!
+interface TenGigE0/0/0/6.3347
+ no shutdown
+!
+interface TenGigE0/0/0/6.3348
+ no shutdown
+!
+interface TenGigE0/0/0/6.3349
+ no shutdown
+!
+interface TenGigE0/0/0/6.3350
+ no shutdown
+!
+interface TenGigE0/0/0/6.3351
+ no shutdown
+!
+interface TenGigE0/0/0/6.3352
+ no shutdown
+!
+interface TenGigE0/0/0/6.3353
+ no shutdown
+!
+ !
+commit Jump Ticket: No shutdown Interface and sub-interfaces TenGigE0/0/0/6
+!********************************************************	 
+!Checks {{item.hostname}}
+!********************************************************	
+!
+!
+show ip int brief | in 0/0/0/6
+!
+show interfaces TenGigE0/0/0/6 | in errors
+!
+!==> Quick Double-check no error on the interfaces 
+!
+	
+!--------------------------------------------------------	   
+!{{item.hostname}}: Enable the MNGT's  OSPF if OSPF is running as PE-CE for mngt  
+!--------------------------------------------------------
+!--------------------------------------------------------	   
+!{{item.hostname}}: Enable vrf PCITS  OSPF interface
+!--------------------------------------------------------	
+router ospf 1
+!
+vrf PCITS
+area 0
+interface TenGigE0/0/0/6.3338
+passive disable
+!
+
+!--------------------------------------------------------	 
+!{{item.hostname}}: Enable all eBGPS peerings for all the interconnections' VRF
+!--------------------------------------------------------	 
+!
+router bgp 64911
+!
+!
+vrf BIP
+!
+ neighbors 192.129.241.66 
+!
+no shutdown 
+!
+!
+vrf DCITS
+!
+ neighbors 192.129.241.18 
+!
+ no shutdown 
+!
+!
+vrf HCITS
+!
+ neighbors 192.129.241.86
+!
+ no shutdown 
+!
+!
+vrf HCOM
+!
+ neighbors 192.129.241.42
+!
+ no shutdown 
+!
+!
+vrf PCITS
+!
+ neighbors 192.129.241.86
+!
+ no shutdown 
+!
+!
+vrf PCOM
+!
+ neighbors 192.129.240.218
+!
+ no shutdown 
+!
+!
+vrf PFBESIA 
+!
+  neighbors 192.2.26.30
+!
+ no shutdown 
+!
+!
+vrf PFHSIA
+!
+ neighbors 192.2.203.146
+!
+ no shutdown 
+!
+!
+vrf PFPSIA
+!
+ neighbors 192.129.241.138
+!
+ no shutdown 
+!
+!
+vrf PFRSIA
+!
+ neighbors 192.2.213.34
+!
+ no shutdown 
+!
+!
+vrf RDS
+!
+ neighbors 192.2.36.134
+!
+ no shutdown 
+!
+!
+vrf RIX
+!
+ neighbors 192.2.21.214
+!
+ no shutdown 
+!
+!
+vrf RVP_CDN
+!
+ neighbors 192.129.241.162
+!
+ no shutdown 
+!
+!
+vrf RVP_GTB
+!
+ neighbors 192.2.141.126
+!
+ no shutdown 
+!
+!
+vrf RVP_SGSS_NAN-HDC
+!
+ neighbors 192.2.16.54
+!
+ no shutdown 
+!
+!
+vrf RVP_SGSS_NAN-PDC
+!
+ neighbors 192.2.14.54
+!
+ no shutdown 
+!
+!
+vrf RVP_SURETE
+!
+ neighbors 192.2.173.218
+!
+ no shutdown 
+!
+!
+vrf RVP_ITEC
+!
+ neighbors 192.2.181.174
+!
+ no shutdown 
+ !
+commit comment Jump:Ticket: No shudown BGP and Ospf Neighnors
+
+!********************************************************	 
+Post Checks PE {{item.hostname}}
+!********************************************************	 
+!	 
+!
+!==> Quick Double-check no error on the interfaces 
+!
+
+show ospf vrf PCITS neighbor
+!
+show interfaces TenGigE0/0/0/6 | in errors
+!
+sh bgp vrf all summary | utility egrep '192.129.240.218|192.129.241.138|192.129.241.162|192.129.241.18\b|192.129.241.42|192.129.241.66|192.129.241.86|192.2.141.126|192.2.14.54|192.2.16.54|192.2.173.218|192.2.181.174|192.2.203.146|192.2.21.214|192.2.213.34|192.2.26.30|192.2.36.134'
+!
+!
+!
+sh bgp vrf BIP neighbors 192.129.241.66 routes 
+sh bgp vrf DCITS neighbors 192.129.241.18 routes 
+sh bgp vrf HCITS neighbors 192.129.241.86 routes 
+sh bgp vrf HCOM neighbors 192.129.241.42 routes 
+sh bgp vrf PCITS neighbors 192.129.241.86 routes 
+sh bgp vrf PCOM neighbors 192.129.240.218 routes 
+sh bgp vrf PFBESIA neighbors 192.2.26.30 routes 
+sh bgp vrf PFHSIA neighbors 192.2.203.146 routes 
+sh bgp vrf PFPSIA neighbors 192.129.241.138 routes 
+sh bgp vrf PFRSIA neighbors 192.2.213.34 routes 
+sh bgp vrf RDS neighbors 192.2.36.134 routes 
+sh bgp vrf RIX neighbors 192.2.21.214 routes 
+sh bgp vrf RVP_CDN neighbors 192.129.241.162 routes 
+sh bgp vrf RVP_GTB neighbors 192.2.141.126 routes 
+sh bgp vrf RVP_SGSS_NAN-HDC neighbors 192.2.16.54 routes 
+sh bgp vrf RVP_SGSS_NAN-PDC neighbors 192.2.14.54 routes 
+sh bgp vrf RVP_SURETE neighbors 192.2.173.218 routes 
+sh bgp vrf RVP_ITEC neighbors 192.2.181.174 routes 
+!
+!
+sh bgp vrf BIP neighbors 192.129.241.66 routes | in Processed
+sh bgp vrf DCITS neighbors 192.129.241.18 routes | in Processed
+sh bgp vrf HCITS neighbors 192.129.241.86 routes | in Processed
+sh bgp vrf HCOM neighbors 192.129.241.42 routes | in Processed
+sh bgp vrf PCOM neighbors 192.129.240.218 routes | in Processed
+sh bgp vrf PFBESIA neighbors 192.2.26.30 routes | in Processed
+sh bgp vrf PFHSIA neighbors 192.2.203.146 routes | in Processed
+sh bgp vrf PFPSIA neighbors 192.129.241.138 routes | in Processed
+sh bgp vrf PFRSIA neighbors 192.2.213.34 routes | in Processed
+sh bgp vrf RDS neighbors 192.2.36.134 routes | in Processed
+sh bgp vrf RIX neighbors 192.2.21.214 routes | in Processed
+sh bgp vrf RVP_CDN neighbors 192.129.241.162 routes | in Processed
+sh bgp vrf RVP_GTB neighbors 192.2.141.126 routes | in Processed
+sh bgp vrf RVP_SGSS_NAN-HDC neighbors 192.2.16.54 routes | in Processed
+sh bgp vrf RVP_SGSS_NAN-PDC neighbors 192.2.14.54 routes | in Processed
+sh bgp vrf RVP_SURETE neighbors 192.2.173.218 routes | in Processed
+sh bgp vrf RVP_ITEC neighbors 192.2.181.174 routes | in Processed
+!
+sh bgp vrf BIP neighbors 192.129.241.66 advertised-routes 
+sh bgp vrf DCITS neighbors 192.129.241.18 advertised-routes 
+sh bgp vrf HCITS neighbors 192.129.241.86 advertised-routes 
+sh bgp vrf HCOM neighbors 192.129.241.42 advertised-routes 
+sh bgp vrf PCITS neighbors 192.129.241.86 advertised-routes 
+sh bgp vrf PCOM neighbors 192.129.240.218 advertised-routes 
+sh bgp vrf PFBESIA neighbors 192.2.26.30 advertised-routes 
+sh bgp vrf PFHSIA neighbors 192.2.203.146 advertised-routes 
+sh bgp vrf PFPSIA neighbors 192.129.241.138 advertised-routes 
+sh bgp vrf PFRSIA neighbors 192.2.213.34 advertised-routes 
+sh bgp vrf RDS neighbors 192.2.36.134 advertised-routes 
+sh bgp vrf RIX neighbors 192.2.21.214 advertised-routes 
+sh bgp vrf RVP_CDN neighbors 192.129.241.162 advertised-routes 
+sh bgp vrf RVP_GTB neighbors 192.2.141.126 advertised-routes 
+sh bgp vrf RVP_SGSS_NAN-HDC neighbors 192.2.16.54 advertised-routes 
+sh bgp vrf RVP_SGSS_NAN-PDC neighbors 192.2.14.54 advertised-routes 
+sh bgp vrf RVP_SURETE neighbors 192.2.173.218 advertised-routes 
+sh bgp vrf RVP_ITEC neighbors 192.2.181.174 advertised-routes 
+!
+sh bgp vrf BIP neighbors 192.129.241.66 advertised-count 
+sh bgp vrf DCITS neighbors 192.129.241.18 advertised-count 
+sh bgp vrf HCITS neighbors 192.129.241.86 advertised-count 
+sh bgp vrf HCOM neighbors 192.129.241.42 advertised-count 
+sh bgp vrf PCITS neighbors 192.129.241.86 advertised-count 
+sh bgp vrf PCOM neighbors 192.129.240.218 advertised-count 
+sh bgp vrf PFBESIA neighbors 192.2.26.30 advertised-count 
+sh bgp vrf PFHSIA neighbors 192.2.203.146 advertised-count 
+sh bgp vrf PFPSIA neighbors 192.129.241.138 advertised-count 
+sh bgp vrf PFRSIA neighbors 192.2.213.34 advertised-count 
+sh bgp vrf RDS neighbors 192.2.36.134 advertised-count 
+sh bgp vrf RIX neighbors 192.2.21.214 advertised-count 
+sh bgp vrf RVP_CDN neighbors 192.129.241.162 advertised-count 
+sh bgp vrf RVP_GTB neighbors 192.2.141.126 advertised-count 
+sh bgp vrf RVP_SGSS_NAN-HDC neighbors 192.2.16.54 advertised-count 
+sh bgp vrf RVP_SGSS_NAN-PDC neighbors 192.2.14.54 advertised-count 
+sh bgp vrf RVP_SURETE neighbors 192.2.173.218 advertised-count 
+sh bgp vrf RVP_ITEC neighbors 192.2.181.174 advertised-count 
+!
+sh ospf vrf PCITS neighbor
+!
+
+
+
+

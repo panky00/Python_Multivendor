@@ -1,0 +1,28 @@
+---
+routers: 
+  - hostname: SC2-A1
+    main_interface: Te0/0/0/8
+	sub_int:
+	   - int: TenGigE0/0/0/8.1500
+	     vrf: RVP_NOOBA
+	   - int: TenGigE0/0/0/8.2490
+	     vrf: RVP_ETRALI
+		 nei: 192.2.156.94
+	   - int: TenGigE0/0/0/8.2501
+         vrf: RVP_PRIVSHAREDSERVICES
+         nei: 192.4.148.49
+       - int: TenGigE0/0/0/8.3801
+         vrf: RVP_SHAREDSERVICES
+         nei: 192.2.248.49
+       - int: TenGigE0/0/0/8.3901
+         vrf: RVP_RUS
+         nei: 192.2.8.217		 
+    
+
+  - hostname: R2
+    loopback: 2.2.2.2 255.255.255.255
+    enable_secret: roger 
+
+  - hostname: R3
+    loopback: 3.3.3.3 255.255.255.255
+    enable_secret: roger 
