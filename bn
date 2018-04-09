@@ -1,0 +1,61 @@
+interface Vlan1500
+  description Int_Admin_NOOBA_IB_SC2
+  no shutdown
+  ip address 192.0.1.97/27
+
+SC2CFDZEUSR2-04# sh run int vlan 2491
+
+!Command: show running-config interface Vlan2491
+!Time: Mon Apr  9 13:44:47 2018
+
+version 6.2(10)
+
+interface Vlan2491
+  description <> <PE-NAME>
+  no shutdown
+  bfd interval 500 min_rx 500 multiplier 3
+  vrf member RVP_ETRALI
+  no ip redirects
+  ip address 192.2.156.98/30
+
+SC2CFDZEUSR2-04# sh run int vlan 2502
+
+!Command: show running-config interface Vlan2502
+!Time: Mon Apr  9 13:44:57 2018
+
+version 6.2(10)
+
+interface Vlan2502
+  description PRVSHAREDSERVICES_To_SC2-A1
+  no shutdown
+  bfd interval 500 min_rx 500 multiplier 3
+  vrf member RVP_PRVSHAREDSERVICES
+  ip address 192.4.148.53/30
+
+SC2CFDZEUSR2-04# sh run int vlan 3802
+
+!Command: show running-config interface Vlan3802
+!Time: Mon Apr  9 13:45:02 2018
+
+version 6.2(10)
+
+interface Vlan3802
+  bfd interval 500 min_rx 500 multiplier 3
+  vrf member PZEUS
+  ip address 192.2.248.53/30
+  description <> To_SC2-A2_Te4/6
+  no shutdown
+
+SC2CFDZEUSR2-04# sh run int vlan 3902
+
+!Command: show running-config interface Vlan3902
+!Time: Mon Apr  9 13:45:10 2018
+
+version 6.2(10)
+
+interface Vlan3902
+  bfd interval 500 min_rx 500 multiplier 3
+  vrf member RVP_RUS
+  ip address 192.2.8.213/30
+  description <> To_SC2-A2_Ten4/6.3902
+  no shutdown
