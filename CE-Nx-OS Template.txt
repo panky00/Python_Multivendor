@@ -1,0 +1,463 @@
+!--------------------------------------------------------	 
+!PRE-Check TIGR4-ODIN-CFD-vdc2: Step 0 Capture the O/P of the below commands for comparison after the change
+!--------------------------------------------------------
+!
+sh int status | in 2/2
+!
+sh bgp vrf all all summary | egrep '192.129.241.65\\b|192.129.241.17\b|192.129.241.85\b|192.129.241.41\b|192.129.240.217\b|192.2.26.29\b|192.2.203.145\b|192.129.241.137\b|192.2.213.33\b|192.2.36.133\b|192.2.21.213\b|192.129.241.161\b|192.2.141.125\b|192.2.16.53\b|192.2.14.53\b|192.2.173.217\b'
+!
+sh int counters errors | egrep 'Eth2/2\b'
+!
+!-------------------------------------------------------- 
+! TIGR4-ODIN-CFD-vdc2: Shutdown the PE<=>CE interface 
+!-------------------------------------------------------- 
+
+interface Ethernet2/2
+shtdown
+!
+interface Ethernet2/2.3052
+shtdown
+!
+interface Ethernet2/2.3324
+shtdown
+!
+interface Ethernet2/2.3331
+shtdown
+!
+interface Ethernet2/2.3332
+shtdown
+!
+interface Ethernet2/2.3333
+shtdown
+!
+interface Ethernet2/2.3334
+shtdown
+!
+interface Ethernet2/2.3335
+shtdown
+!
+interface Ethernet2/2.3338
+shtdown
+!
+interface Ethernet2/2.3339
+shtdown
+!
+interface Ethernet2/2.3340
+shtdown
+!
+interface Ethernet2/2.3341
+shtdown
+!
+interface Ethernet2/2.3342
+shtdown
+!
+interface Ethernet2/2.3343
+shtdown
+!
+interface Ethernet2/2.3344
+shtdown
+!
+interface Ethernet2/2.3345
+shtdown
+!
+interface Ethernet2/2.3346
+shtdown
+!
+interface Ethernet2/2.3347
+shtdown
+!
+interface Ethernet2/2.3348
+shtdown
+!
+interface Ethernet2/2.3349
+shtdown
+!
+interface Ethernet2/2.3350
+shtdown
+!
+interface Ethernet2/2.3351
+shtdown
+!
+interface Ethernet2/2.3352
+shtdown
+!
+interface Ethernet2/2.3353
+shtdown
+!
+!
+!##################################################################################### 
+! Step 1B Rollout : TIGR4-ODIN-CFD-vdc2==>CE-PE interconnection isolation if replacing Vlans interface by sub-interfaces
+!#################################################################################### 
+ 
+!-------------------------------------------------------- 
+! TIGR4-ODIN-CFD-vdc2: change the interface description 
+!-------------------------------------------------------- 
+
+interface Ethernet2/2.3324
+ description FED_RVP_ITEC_TIG-D4_TE 0/0/0/6_3324_10G
+!
+interface Ethernet2/2.3331
+ description FED_BIP_TIG-D4_TE 0/0/0/6_3331_10G
+!
+interface Ethernet2/2.3332
+ description FED_COM_TIG-D4_TE 0/0/0/6_3332_10G
+!
+interface Ethernet2/2.3333
+  description FED_DCITS_TIG-D4_TE 0/0/0/6_3333_10G
+!
+interface Ethernet2/2.3334
+  description FED_HCITS_TIG-D4_TE 0/0/0/6_3334_10G
+!
+interface Ethernet2/2.3335
+  description FED_HCOM_TIG-D4_TE 0/0/0/6_3335_10G
+!
+interface Ethernet2/2.3338
+  description FED_PCITS_TIG-D4_TE 0/0/0/6_3338_10G
+!
+interface Ethernet2/2.3339
+  description FED_PCOM_TIG-D4_TE 0/0/0/6_3339_10G
+!
+interface Ethernet2/2.3340
+  description FED_PFBESIA_TIG-D4_TE 0/0/0/6_3340_10G
+!
+interface Ethernet2/2.3341
+  description FED_PFHSIA_TIG-D4_TE 0/0/0/6_3341_10G
+!
+interface Ethernet2/2.3342
+  description FED_PFPSIA_TIG-D4_TE 0/0/0/6_3342_10G
+!
+interface Ethernet2/2.3343
+  description FED_PFRSIA_TIG-D4_TE 0/0/0/6_3343_10G
+!
+interface Ethernet2/2.3344
+  description FED_RDS_TIG-D4_TE 0/0/0/6_3344_10G
+!
+interface Ethernet2/2.3345
+  description FED_RIX_TIG-D4_TE 0/0/0/6_3345_10G
+!
+interface Ethernet2/2.3346
+  description FED_RIX_TIG-D4_TE 0/0/0/6_3346_10G
+!
+interface Ethernet2/2.3347
+  description FED_RVP_CDN_TIG-D4_TE 0/0/0/6_3347_10G
+!
+interface Ethernet2/2.3348
+  description FED_RVP_GIMS_TIG-D4_TE 0/0/0/6_3348_10G
+!
+interface Ethernet2/2.3349
+  description FED_RVP_GTB_TIG-D4_TE 0/0/0/6_3349_10G
+!
+interface Ethernet2/2.3350
+  description FED_RVP_SGSS_NAN-HDC_TIG-D4_TE 0/0/0/6_3350_10G
+!
+interface Ethernet2/2.3351
+  description FED_RVP_SGSS_NAN-PDC_TIG-D4_TE 0/0/0/6_3351_10G
+!
+interface Ethernet2/2.3352
+  description FED_RVP_SURETE_TIG-D4_TE 0/0/0/6_3352_10G
+!
+interface Ethernet2/2.3353
+  description FED_TSM_CAZA_TIG-D4_TE 0/0/0/6_3353_10G
+!
+end
+copy running-config startup-config 
+
+
+!******************************************************** 
+ TIGR4-ODIN-CFD-vdc2: Checks 
+!******************************************************** 
+!Check if the BFD feature is enable
+show feature | include bfd
+!
+!##################################################################################### 
+! Step 2 Rollout Standardisation :TIGR4-ODIN-CFD-vdc2
+!#################################################################################### 
+!
+!--------------------------------------------------------
+!TIGR4-ODIN-CFD-vdc2: interface Standardisation:
+!--------------------------------------------------------
+!
+! ==> Note: BFD is not supported Vlan: All Vlan interface must be deleted and recreated as sub interfaces
+!
+! interface Ten or GigabitEthernet
+!
+! a) Check the description format: FED_<VRF NAME>_<CE NAME>_SxPx_BW_TELCO_NUMBER
+! B) If TElco Link add: dampening 
+! C) If not native speed: bandwidth x00000
+! C) logging event link-status
+! D) Check the correct WRR
+!
+!sub-interface Ten or GigabitEthernet.wxyz
+!
+! a) Check the description format: FED_<VRF NAME>_<CE NAME>_SxPx_BW
+! B) Add if missIN ing: no ip redirects,no ip unreachables, no ip proxy-arp
+! C) Add BFD: bfd  interval 500 min_rx 500 multiplier 3 /!\ for Etherchannels: bfd interval 750 min_rx 750 multiplier 3
+!
+interface Ethernet2/2
+ !
+interface Ethernet2/2.3052
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3324
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3 
+ !
+interface Ethernet2/2.3331
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3332
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3333
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3334
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3335
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3338
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3339
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3340
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3341
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3342
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3343
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3344
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3345
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3346
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3347
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3348
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3349
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3350
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3351
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3352
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3353
+ no ip redirects 
+ no ip unreachables 
+ no ip proxy-arp 
+ bfd interval 500 min_rx 500 multiplier 3
+ !
+!
+
+
+!--------------------------------------------------------
+! TIGR4-ODIN-CFD-vdc2: Update all the eBGP peers eBGP
+!--------------------------------------------------------
+!
+! a) Check the description format: eBGP <PE name>_<VRF name>>
+! B) Add if missing: neighbor <PE IP@> fall-over bfd
+! C) Delete route-maps set metrics when possible /!\ to be confirmed with HSG\MBS
+! D) Add the per neighbor route-maps for plan selection Option 1 (without static Metric) or Option 2 (static Metrics)
+!
+ 
+
+   
+ 
+### The neibhor description is not as per standard #### 
+
+!--------------------------------------------------------
+! TIGR4-ODIN-CFD-vdc2: Update all the eBGP peers eBGP
+!--------------------------------------------------------
+!
+! a) Check the description format: eBGP <PE name>_<VRF name>>
+! B) Add if missIN ing: neighbor <PE IP@> fall-over bfd
+! C) Delete route-maps set metrics when possible /!\ to be confirmed with HSG\MBS
+! D) Add the per neighbor route-maps for plan selection Option 1 (without static Metric) or Option 2 (static Metrics)
+--------------------------------------------------------
+! TIG-D4: eBGP with RED or BLUE Plan + BFD (Option 1 without static Metrics) and remove the existing route-maps if any
+!--------------------------------------------------------
+!
+!
+! 
+
+! 
+!
+!
+!#####################################################################################
+! Step 4 Rollout PE-CE IN interconnection reactivation
+! ####################################################################################
+!
+!--------------------------------------------------------	 
+!  TIGR4-ODIN-CFD-vdc2: Enable the PE<=>CE interface
+!--------------------------------------------------------
+!	 
+interface Ethernet2/2
+ no shutdown
+!
+interface Ethernet2/2.3052
+ no shutdown
+!
+interface Ethernet2/2.3324
+ no shutdown
+!
+interface Ethernet2/2.3331
+ no shutdown
+!
+interface Ethernet2/2.3332
+ no shutdown
+!
+interface Ethernet2/2.3333
+ no shutdown
+!
+interface Ethernet2/2.3334
+ no shutdown
+!
+interface Ethernet2/2.3335
+ no shutdown
+!
+interface Ethernet2/2.3338
+ no shutdown
+!
+interface Ethernet2/2.3339
+ no shutdown
+!
+interface Ethernet2/2.3340
+ no shutdown
+!
+interface Ethernet2/2.3341
+ no shutdown
+!
+interface Ethernet2/2.3342
+ no shutdown
+!
+interface Ethernet2/2.3343
+ no shutdown
+!
+interface Ethernet2/2.3344
+ no shutdown
+!
+interface Ethernet2/2.3345
+ no shutdown
+!
+interface Ethernet2/2.3346
+ no shutdown
+!
+interface Ethernet2/2.3347
+ no shutdown
+!
+interface Ethernet2/2.3348
+ no shutdown
+!
+interface Ethernet2/2.3349
+ no shutdown
+!
+interface Ethernet2/2.3350
+ no shutdown
+!
+interface Ethernet2/2.3351
+ no shutdown
+!
+interface Ethernet2/2.3352
+ no shutdown
+!
+interface Ethernet2/2.3353
+ no shutdown
+!
+!
+copy running config startup-config
+#######################################################################
+# Post Checks CE TIGR4-ODIN-CFD-vdc2
+####################################################################### 
+
+sh bgp vrf all all summary | egrep '192.129.241.65\\b|192.129.241.17\b|192.129.241.85\b|192.129.241.41\b|192.129.240.217\b|192.2.26.29\b|192.2.203.145\b|192.129.241.137\b|192.2.213.33\b|192.2.36.133\b|192.2.21.213\b|192.129.241.161\b|192.2.141.125\b|192.2.16.53\b|192.2.14.53\b|192.2.173.217\b'
+!
+sh int counters errors | egrep 'Eth2/2\b'
+!
+
+
