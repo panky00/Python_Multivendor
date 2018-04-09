@@ -1,0 +1,6 @@
+  encapsulation dot1q 3052
+  logging event port link-status
+  vrf member ADMRCSG
+  no ip redirects
+  ip address 192.129.240.181/30
+  no ipv6 redirects
