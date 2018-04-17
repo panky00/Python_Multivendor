@@ -1,0 +1,451 @@
+
+#####################################################################################	   
+! Rollback:	   /!\ à mettre dans un ficher distinct dans la section rollback de la DMEP .doc
+! ####################################################################################	   
+!	   
+!--------------------------------------------------------	   
+! Step 1 TIG-D4: Rollback Peerings BGP and Interfacy policy map on all Interconexion	   
+!--------------------------------------------------------
+
+show configuration commit list detail | utility egrep 'Comment:  JUMP-Ticket:Interface Description' -B 4
+
+! Find the rollback ID from the last command
+
+show configuration commit changes <commit-id>
+
+! It will show the configuration of Interface description change
+! If that is the case do the rollback with the commit ID
+
+rollback configuration <commit-id> comment JUMP-Ticket:rollback
+
+!********************************************************	   
+Checks TIG-D4
+!********************************************************	   
+!
+sh ip int brief | in 0/0/0/6
+!	   
+show interfaces TenGigE0/0/0/6 | in errors
+!
+sh ospf vrf PCITS neighbor
+!
+sh bgp vrf all summary | utility egrep '192.129.240.218|192.129.241.138|192.129.241.162|192.129.241.18\b|192.129.241.42|192.129.241.66|192.129.241.86|192.2.141.126|192.2.14.54|192.2.16.54|192.2.173.218|192.2.181.174|192.2.203.146|192.2.21.214|192.2.213.34|192.2.26.30|192.2.36.134'
+!
+!
+!
+sh bgp vrf BIP neighbors 192.129.241.66 routes 
+sh bgp vrf DCITS neighbors 192.129.241.18 routes 
+sh bgp vrf HCITS neighbors 192.129.241.86 routes 
+sh bgp vrf HCOM neighbors 192.129.241.42 routes 
+sh bgp vrf PCITS neighbors 192.129.241.86 routes 
+sh bgp vrf PCOM neighbors 192.129.240.218 routes 
+sh bgp vrf PFBESIA neighbors 192.2.26.30 routes 
+sh bgp vrf PFHSIA neighbors 192.2.203.146 routes 
+sh bgp vrf PFPSIA neighbors 192.129.241.138 routes 
+sh bgp vrf PFRSIA neighbors 192.2.213.34 routes 
+sh bgp vrf RDS neighbors 192.2.36.134 routes 
+sh bgp vrf RIX neighbors 192.2.21.214 routes 
+sh bgp vrf RVP_CDN neighbors 192.129.241.162 routes 
+sh bgp vrf RVP_GTB neighbors 192.2.141.126 routes 
+sh bgp vrf RVP_SGSS_NAN-HDC neighbors 192.2.16.54 routes 
+sh bgp vrf RVP_SGSS_NAN-PDC neighbors 192.2.14.54 routes 
+sh bgp vrf RVP_SURETE neighbors 192.2.173.218 routes 
+sh bgp vrf RVP_ITEC neighbors 192.2.181.174 routes 
+!
+!
+sh bgp vrf BIP neighbors 192.129.241.66 routes | in Processed
+sh bgp vrf DCITS neighbors 192.129.241.18 routes | in Processed
+sh bgp vrf HCITS neighbors 192.129.241.86 routes | in Processed
+sh bgp vrf HCOM neighbors 192.129.241.42 routes | in Processed
+sh bgp vrf PCOM neighbors 192.129.240.218 routes | in Processed
+sh bgp vrf PFBESIA neighbors 192.2.26.30 routes | in Processed
+sh bgp vrf PFHSIA neighbors 192.2.203.146 routes | in Processed
+sh bgp vrf PFPSIA neighbors 192.129.241.138 routes | in Processed
+sh bgp vrf PFRSIA neighbors 192.2.213.34 routes | in Processed
+sh bgp vrf RDS neighbors 192.2.36.134 routes | in Processed
+sh bgp vrf RIX neighbors 192.2.21.214 routes | in Processed
+sh bgp vrf RVP_CDN neighbors 192.129.241.162 routes | in Processed
+sh bgp vrf RVP_GTB neighbors 192.2.141.126 routes | in Processed
+sh bgp vrf RVP_SGSS_NAN-HDC neighbors 192.2.16.54 routes | in Processed
+sh bgp vrf RVP_SGSS_NAN-PDC neighbors 192.2.14.54 routes | in Processed
+sh bgp vrf RVP_SURETE neighbors 192.2.173.218 routes | in Processed
+sh bgp vrf RVP_ITEC neighbors 192.2.181.174 routes | in Processed
+!
+sh bgp vrf BIP neighbors 192.129.241.66 advertised-routes 
+sh bgp vrf DCITS neighbors 192.129.241.18 advertised-routes 
+sh bgp vrf HCITS neighbors 192.129.241.86 advertised-routes 
+sh bgp vrf HCOM neighbors 192.129.241.42 advertised-routes 
+sh bgp vrf PCITS neighbors 192.129.241.86 advertised-routes 
+sh bgp vrf PCOM neighbors 192.129.240.218 advertised-routes 
+sh bgp vrf PFBESIA neighbors 192.2.26.30 advertised-routes 
+sh bgp vrf PFHSIA neighbors 192.2.203.146 advertised-routes 
+sh bgp vrf PFPSIA neighbors 192.129.241.138 advertised-routes 
+sh bgp vrf PFRSIA neighbors 192.2.213.34 advertised-routes 
+sh bgp vrf RDS neighbors 192.2.36.134 advertised-routes 
+sh bgp vrf RIX neighbors 192.2.21.214 advertised-routes 
+sh bgp vrf RVP_CDN neighbors 192.129.241.162 advertised-routes 
+sh bgp vrf RVP_GTB neighbors 192.2.141.126 advertised-routes 
+sh bgp vrf RVP_SGSS_NAN-HDC neighbors 192.2.16.54 advertised-routes 
+sh bgp vrf RVP_SGSS_NAN-PDC neighbors 192.2.14.54 advertised-routes 
+sh bgp vrf RVP_SURETE neighbors 192.2.173.218 advertised-routes 
+sh bgp vrf RVP_ITEC neighbors 192.2.181.174 advertised-routes 
+!
+sh bgp vrf BIP neighbors 192.129.241.66 advertised-count 
+sh bgp vrf DCITS neighbors 192.129.241.18 advertised-count 
+sh bgp vrf HCITS neighbors 192.129.241.86 advertised-count 
+sh bgp vrf HCOM neighbors 192.129.241.42 advertised-count 
+sh bgp vrf PCITS neighbors 192.129.241.86 advertised-count 
+sh bgp vrf PCOM neighbors 192.129.240.218 advertised-count 
+sh bgp vrf PFBESIA neighbors 192.2.26.30 advertised-count 
+sh bgp vrf PFHSIA neighbors 192.2.203.146 advertised-count 
+sh bgp vrf PFPSIA neighbors 192.129.241.138 advertised-count 
+sh bgp vrf PFRSIA neighbors 192.2.213.34 advertised-count 
+sh bgp vrf RDS neighbors 192.2.36.134 advertised-count 
+sh bgp vrf RIX neighbors 192.2.21.214 advertised-count 
+sh bgp vrf RVP_CDN neighbors 192.129.241.162 advertised-count 
+sh bgp vrf RVP_GTB neighbors 192.2.141.126 advertised-count 
+sh bgp vrf RVP_SGSS_NAN-HDC neighbors 192.2.16.54 advertised-count 
+sh bgp vrf RVP_SGSS_NAN-PDC neighbors 192.2.14.54 advertised-count 
+sh bgp vrf RVP_SURETE neighbors 192.2.173.218 advertised-count 
+sh bgp vrf RVP_ITEC neighbors 192.2.181.174 advertised-count 
+!
+
+!
+
+!--------------------------------------------------------	   
+! TIGR4-ODIN-CFD-vdc2: Rollback interfaces Configuration
+!--------------------------------------------------------
+!-------------------------------------------------------- 
+! TIGR4-ODIN-CFD-vdc2: Shutdown the PE<=>CE interface 
+!-------------------------------------------------------- 
+
+interface Ethernet2/2
+shtdown
+!
+interface Ethernet2/2.3052
+shtdown
+!
+interface Ethernet2/2.3324
+shtdown
+!
+interface Ethernet2/2.3331
+shtdown
+!
+interface Ethernet2/2.3332
+shtdown
+!
+interface Ethernet2/2.3333
+shtdown
+!
+interface Ethernet2/2.3334
+shtdown
+!
+interface Ethernet2/2.3335
+shtdown
+!
+interface Ethernet2/2.3338
+shtdown
+!
+interface Ethernet2/2.3339
+shtdown
+!
+interface Ethernet2/2.3340
+shtdown
+!
+interface Ethernet2/2.3341
+shtdown
+!
+interface Ethernet2/2.3342
+shtdown
+!
+interface Ethernet2/2.3343
+shtdown
+!
+interface Ethernet2/2.3344
+shtdown
+!
+interface Ethernet2/2.3345
+shtdown
+!
+interface Ethernet2/2.3346
+shtdown
+!
+interface Ethernet2/2.3347
+shtdown
+!
+interface Ethernet2/2.3348
+shtdown
+!
+interface Ethernet2/2.3349
+shtdown
+!
+interface Ethernet2/2.3350
+shtdown
+!
+interface Ethernet2/2.3351
+shtdown
+!
+interface Ethernet2/2.3352
+shtdown
+!
+interface Ethernet2/2.3353
+shtdown
+!
+!******************************************************** 
+ TIGR4-ODIN-CFD-vdc2: remove the bfd configuration from interface
+!******************************************************** 
+!
+interface Ethernet2/2.3052
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3324
+ no bfd interval 500 min_rx 500 multiplier 3 
+ !
+interface Ethernet2/2.3331
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3332
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3333
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3334
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3335
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3338
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3339
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3340
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3341
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3342
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3343
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3344
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3345
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3346
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3347
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3348
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3349
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3350
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3351
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3352
+ no bfd interval 500 min_rx 500 multiplier 3
+ !
+interface Ethernet2/2.3353
+ no bfd interval 500 min_rx 500 multiplier 3
+
+interface Ethernet2/2.3338
+no ip ospf bfd
+!
+end
+copy running-config startup-config
+!--------------------------------------------------------	 
+!  TIGR4-ODIN-CFD-vdc2: Enable the PE<=>CE interface
+!--------------------------------------------------------
+!	 
+interface Ethernet2/2
+ no shutdown
+!
+interface Ethernet2/2.3052
+ no shutdown
+!
+interface Ethernet2/2.3324
+ no shutdown
+!
+interface Ethernet2/2.3331
+ no shutdown
+!
+interface Ethernet2/2.3332
+ no shutdown
+!
+interface Ethernet2/2.3333
+ no shutdown
+!
+interface Ethernet2/2.3334
+ no shutdown
+!
+interface Ethernet2/2.3335
+ no shutdown
+!
+interface Ethernet2/2.3338
+ no shutdown
+!
+interface Ethernet2/2.3339
+ no shutdown
+!
+interface Ethernet2/2.3340
+ no shutdown
+!
+interface Ethernet2/2.3341
+ no shutdown
+!
+interface Ethernet2/2.3342
+ no shutdown
+!
+interface Ethernet2/2.3343
+ no shutdown
+!
+interface Ethernet2/2.3344
+ no shutdown
+!
+interface Ethernet2/2.3345
+ no shutdown
+!
+interface Ethernet2/2.3346
+ no shutdown
+!
+interface Ethernet2/2.3347
+ no shutdown
+!
+interface Ethernet2/2.3348
+ no shutdown
+!
+interface Ethernet2/2.3349
+ no shutdown
+!
+interface Ethernet2/2.3350
+ no shutdown
+!
+interface Ethernet2/2.3351
+ no shutdown
+!
+interface Ethernet2/2.3352
+ no shutdown
+!
+interface Ethernet2/2.3353
+ no shutdown
+!
+!
+copy running config startup-config
+!--------------------------------------------------------	 
+
+
+!********************************************************	   
+Checks TIGR4-ODIN-CFD-vdc2
+!********************************************************
+show int status | in 2/2
+!
+sh int counters errors | egrep 'Eth2/2\b'
+!
+sh bgp vrf all all summary | egrep '192.129.241.65\\b|192.129.241.17\b|192.129.241.85\b|192.129.241.41\b|192.129.240.217\b|192.2.26.29\b|192.2.203.145\b|192.129.241.137\b|192.2.213.33\b|192.2.36.133\b|192.2.21.213\b|192.129.241.161\b|192.2.141.125\b|192.2.16.53\b|192.2.14.53\b|192.2.173.217\b'
+!
+!
+!********************************************************	   
+Checks TIG-D4
+!********************************************************	   
+!
+sh ip int brief | in 0/0/0/6
+!	   
+show interfaces TenGigE0/0/0/6 | in errors
+!
+sh ospf vrf PCITS neighbor
+!
+sh bgp vrf all summary | utility egrep '192.129.240.218|192.129.241.138|192.129.241.162|192.129.241.18\b|192.129.241.42|192.129.241.66|192.129.241.86|192.2.141.126|192.2.14.54|192.2.16.54|192.2.173.218|192.2.181.174|192.2.203.146|192.2.21.214|192.2.213.34|192.2.26.30|192.2.36.134'
+!
+!
+!
+sh bgp vrf BIP neighbors 192.129.241.66 routes 
+sh bgp vrf DCITS neighbors 192.129.241.18 routes 
+sh bgp vrf HCITS neighbors 192.129.241.86 routes 
+sh bgp vrf HCOM neighbors 192.129.241.42 routes 
+sh bgp vrf PCITS neighbors 192.129.241.86 routes 
+sh bgp vrf PCOM neighbors 192.129.240.218 routes 
+sh bgp vrf PFBESIA neighbors 192.2.26.30 routes 
+sh bgp vrf PFHSIA neighbors 192.2.203.146 routes 
+sh bgp vrf PFPSIA neighbors 192.129.241.138 routes 
+sh bgp vrf PFRSIA neighbors 192.2.213.34 routes 
+sh bgp vrf RDS neighbors 192.2.36.134 routes 
+sh bgp vrf RIX neighbors 192.2.21.214 routes 
+sh bgp vrf RVP_CDN neighbors 192.129.241.162 routes 
+sh bgp vrf RVP_GTB neighbors 192.2.141.126 routes 
+sh bgp vrf RVP_SGSS_NAN-HDC neighbors 192.2.16.54 routes 
+sh bgp vrf RVP_SGSS_NAN-PDC neighbors 192.2.14.54 routes 
+sh bgp vrf RVP_SURETE neighbors 192.2.173.218 routes 
+sh bgp vrf RVP_ITEC neighbors 192.2.181.174 routes 
+!
+!
+sh bgp vrf BIP neighbors 192.129.241.66 routes | in Processed
+sh bgp vrf DCITS neighbors 192.129.241.18 routes | in Processed
+sh bgp vrf HCITS neighbors 192.129.241.86 routes | in Processed
+sh bgp vrf HCOM neighbors 192.129.241.42 routes | in Processed
+sh bgp vrf PCOM neighbors 192.129.240.218 routes | in Processed
+sh bgp vrf PFBESIA neighbors 192.2.26.30 routes | in Processed
+sh bgp vrf PFHSIA neighbors 192.2.203.146 routes | in Processed
+sh bgp vrf PFPSIA neighbors 192.129.241.138 routes | in Processed
+sh bgp vrf PFRSIA neighbors 192.2.213.34 routes | in Processed
+sh bgp vrf RDS neighbors 192.2.36.134 routes | in Processed
+sh bgp vrf RIX neighbors 192.2.21.214 routes | in Processed
+sh bgp vrf RVP_CDN neighbors 192.129.241.162 routes | in Processed
+sh bgp vrf RVP_GTB neighbors 192.2.141.126 routes | in Processed
+sh bgp vrf RVP_SGSS_NAN-HDC neighbors 192.2.16.54 routes | in Processed
+sh bgp vrf RVP_SGSS_NAN-PDC neighbors 192.2.14.54 routes | in Processed
+sh bgp vrf RVP_SURETE neighbors 192.2.173.218 routes | in Processed
+sh bgp vrf RVP_ITEC neighbors 192.2.181.174 routes | in Processed
+!
+sh bgp vrf BIP neighbors 192.129.241.66 advertised-routes 
+sh bgp vrf DCITS neighbors 192.129.241.18 advertised-routes 
+sh bgp vrf HCITS neighbors 192.129.241.86 advertised-routes 
+sh bgp vrf HCOM neighbors 192.129.241.42 advertised-routes 
+sh bgp vrf PCITS neighbors 192.129.241.86 advertised-routes 
+sh bgp vrf PCOM neighbors 192.129.240.218 advertised-routes 
+sh bgp vrf PFBESIA neighbors 192.2.26.30 advertised-routes 
+sh bgp vrf PFHSIA neighbors 192.2.203.146 advertised-routes 
+sh bgp vrf PFPSIA neighbors 192.129.241.138 advertised-routes 
+sh bgp vrf PFRSIA neighbors 192.2.213.34 advertised-routes 
+sh bgp vrf RDS neighbors 192.2.36.134 advertised-routes 
+sh bgp vrf RIX neighbors 192.2.21.214 advertised-routes 
+sh bgp vrf RVP_CDN neighbors 192.129.241.162 advertised-routes 
+sh bgp vrf RVP_GTB neighbors 192.2.141.126 advertised-routes 
+sh bgp vrf RVP_SGSS_NAN-HDC neighbors 192.2.16.54 advertised-routes 
+sh bgp vrf RVP_SGSS_NAN-PDC neighbors 192.2.14.54 advertised-routes 
+sh bgp vrf RVP_SURETE neighbors 192.2.173.218 advertised-routes 
+sh bgp vrf RVP_ITEC neighbors 192.2.181.174 advertised-routes 
+!
+sh bgp vrf BIP neighbors 192.129.241.66 advertised-count 
+sh bgp vrf DCITS neighbors 192.129.241.18 advertised-count 
+sh bgp vrf HCITS neighbors 192.129.241.86 advertised-count 
+sh bgp vrf HCOM neighbors 192.129.241.42 advertised-count 
+sh bgp vrf PCITS neighbors 192.129.241.86 advertised-count 
+sh bgp vrf PCOM neighbors 192.129.240.218 advertised-count 
+sh bgp vrf PFBESIA neighbors 192.2.26.30 advertised-count 
+sh bgp vrf PFHSIA neighbors 192.2.203.146 advertised-count 
+sh bgp vrf PFPSIA neighbors 192.129.241.138 advertised-count 
+sh bgp vrf PFRSIA neighbors 192.2.213.34 advertised-count 
+sh bgp vrf RDS neighbors 192.2.36.134 advertised-count 
+sh bgp vrf RIX neighbors 192.2.21.214 advertised-count 
+sh bgp vrf RVP_CDN neighbors 192.129.241.162 advertised-count 
+sh bgp vrf RVP_GTB neighbors 192.2.141.126 advertised-count 
+sh bgp vrf RVP_SGSS_NAN-HDC neighbors 192.2.16.54 advertised-count 
+sh bgp vrf RVP_SGSS_NAN-PDC neighbors 192.2.14.54 advertised-count 
+sh bgp vrf RVP_SURETE neighbors 192.2.173.218 advertised-count 
+sh bgp vrf RVP_ITEC neighbors 192.2.181.174 advertised-count 
+!
